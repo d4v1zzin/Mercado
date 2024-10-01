@@ -29,6 +29,7 @@ void cadastro();
 void listar();
 void comprar();
 void visualizarCarrinho();
+void removerProduto();
 void fecharPedido();
 int temnocarrinho(int codigo);
 Produto* pegarProdutoPorCodigo(int codigo);
@@ -44,13 +45,14 @@ int main() {
 void menu() {
     int opcao;
     do {
-        printf("\n=== Supermercado Pimposo ===\n");
+        printf("\n=== Supermercado ===\n");
         printf("1. Cadastrar Produto\n");
         printf("2. Listar Produtos\n");
         printf("3. Comprar Produto\n");
         printf("4. Visualizar Carrinho\n");
-        printf("5. Fechar Pedido\n");
-        printf("6. Sair\n");
+        printf("5. Remover item\n");
+        printf("6. Fechar Pedido\n");
+        printf("7. Sair\n");
         printf("Escolha uma opcao: ");
         scanf("%d", &opcao);
 
@@ -59,11 +61,12 @@ void menu() {
             case 2: listar(); break;
             case 3: comprar(); break;
             case 4: visualizarCarrinho(); break;
-            case 5: fecharPedido(); break;
-            case 6: printf("Fechando o programa\n"); break;
+            case 5: removerProduto(); break;
+            case 6: fecharPedido(); break;
+            case 7: printf("Saindo...\n"); break;
             default: printf("Opcao invalida!\n");
         }
-    } while (opcao != 6);
+    } while (opcao != 7);
 }
 
 // função para cadastrar o produto
@@ -164,6 +167,31 @@ void fecharPedido() {
     numCarrinho = 0; //  <- Como o cliente pagou o produto, agora o carrinho está vazio.
 }
 
+// Função para tirar produtos do carrinho:
+void removerProduto() {
+    if (numCarrinho == 0) {
+        printf("Não tem anda no carrinho :( .\n");
+        return;
+    }
+
+    int codigo;
+    printf("Digite o codigo do item que deseja remover: ");
+    scanf("%d", &codigo);
+
+    int idxCarrinho = temnocarrinho(codigo);
+    if (idxCarrinho == -1) {
+        printf("Produto nao encontrado no carrinho.\n");
+        return;
+    }
+
+
+    for (int i = idxCarrinho; i < numCarrinho - 1; i++) {
+        carrinho[i] = carrinho[i + 1];
+    }
+
+    numCarrinho--; // Serve para subtrair a quantidade de itens que tem no carrinho.
+    printf("O item foi removido do carrinho.\n");
+}
 // funlção que verifica se tem um item no carrinho:
 int temnocarrinho(int codigo) {
     for (int i = 0; i < numCarrinho; i++) {
